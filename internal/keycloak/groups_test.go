@@ -127,3 +127,105 @@ func TestGroupsUnmarshal(t *testing.T) {
 		})
 	}
 }
+
+func TestMissingGLPIDs(t *testing.T) {
+	var testCases = map[string]struct {
+		input  *keycloak.Group
+		expect bool
+	}{
+		"missing attribute": {input: &keycloak.Group{
+			ID: "0a442bdd-e89d-4871-8552-80fcc386e236",
+			GroupUpdateRepresentation: keycloak.GroupUpdateRepresentation{
+				Name: "project-lagoon-website",
+				Attributes: map[string][]string{
+					"lagoon-projects": {`23`},
+					"type":            {`project-default-group`},
+				},
+			},
+		},
+			expect: true,
+		},
+		"has attribute": {input: &keycloak.Group{
+			ID: "9e49d864-d78c-4875-ae46-57daa7151ebe",
+			GroupUpdateRepresentation: keycloak.GroupUpdateRepresentation{
+				Name: "project-example-ruby-on-rails",
+				Attributes: map[string][]string{
+					"group-lagoon-project-ids": {`{"project-example-ruby-on-rails":[38]}`},
+					"lagoon-projects":          {`38`},
+					"type":                     {`project-default-group`},
+				},
+			},
+		},
+			expect: false,
+		},
+	}
+	for name, tc := range testCases {
+		t.Run(name, func(tt *testing.T) {
+			if result := tc.input.MissingGLPIDs(); result != tc.expect {
+				tt.Fatalf("expected %v, got %v", tc.expect, result)
+			}
+		})
+	}
+}
+
+func TestUpdateGroupLagoonProjectIDs(t *testing.T) {
+	var testCases = map[string]struct {
+		input  *keycloak.Group
+		expect *keycloak.Group
+	}{
+		"update regular group": {
+			input: &keycloak.Group{
+				ID: "f6697da3-016a-43cd-ba9f-3f5b91b45302",
+				GroupUpdateRepresentation: keycloak.GroupUpdateRepresentation{
+					Name: "drupal-example",
+					Attributes: map[string][]string{
+						"lagoon-projects": {`31,36,34,25,35`},
+					},
+				},
+			},
+			expect: &keycloak.Group{
+				ID: "f6697da3-016a-43cd-ba9f-3f5b91b45302",
+				GroupUpdateRepresentation: keycloak.GroupUpdateRepresentation{
+					Name: "drupal-example",
+					Attributes: map[string][]string{
+						"group-lagoon-project-ids": {`{"drupal-example":[31,36,34,25,35]}`},
+						"lagoon-projects":          {`31,36,34,25,35`},
+					},
+				},
+			},
+		},
+		"update project group": {
+			input: &keycloak.Group{
+				ID: "9e49d864-d78c-4875-ae46-57daa7151ebe",
+				GroupUpdateRepresentation: keycloak.GroupUpdateRepresentation{
+					Name: "project-example-ruby-on-rails",
+					Attributes: map[string][]string{
+						"lagoon-projects": {`38`},
+						"type":            {`project-default-group`},
+					},
+				},
+			},
+			expect: &keycloak.Group{
+				ID: "9e49d864-d78c-4875-ae46-57daa7151ebe",
+				GroupUpdateRepresentation: keycloak.GroupUpdateRepresentation{
+					Name: "project-example-ruby-on-rails",
+					Attributes: map[string][]string{
+						"group-lagoon-project-ids": {`{"project-example-ruby-on-rails":[38]}`},
+						"lagoon-projects":          {`38`},
+						"type":                     {`project-default-group`},
+					},
+				},
+			},
+		},
+	}
+	for name, tc := range testCases {
+		t.Run(name, func(tt *testing.T) {
+			if err := tc.input.UpdateGroupLagoonProjectIDs(); err != nil {
+				tt.Fatal(err)
+			}
+			if !reflect.DeepEqual(tc.input, tc.expect) {
+				tt.Fatalf("expected %v, got %v", tc.expect, tc.input)
+			}
+		})
+	}
+}

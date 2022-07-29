@@ -1,0 +1,7 @@
+{
+  "account-service": "http://lagoon-core-keycloak:8080/auth/realms/master/account",
+  "public_key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmYacMfT8XOCwPcRwZu2y1cfRkZKhqCsV4Yxo1Xkw5eUpFOYk9dzzTHqVHVRatSLvC78LqibTLO/Zf5syz3OMsgNjjB36t7g4TXMD/g7ohhgHTrbF/K0Kndmqy9Bsy3aS/hwCqJ+oVHBTf/Ytzk/1dwKqlWNXJIomEChKr3ncifZT3avLoudt23xSgezKbajVT61BL5bEpsjeHzIFMODnztfvAhejToQIIJPOjDrmSXVLtatfItZu2kkHPOubj3zCCi9iJy2EMYZ1/mlEw3vUdYC585nMCztT9WgYWFJZDvuYRle0I4G2BPxNJtPGFfkeh4hJzO37WwiE8o9FJvU70QIDAQAB",
+  "realm": "master",
+  "token-service": "http://lagoon-core-keycloak:8080/auth/realms/master/protocol/openid-connect",
+  "tokens-not-before": 0
+}

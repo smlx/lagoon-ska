@@ -16,7 +16,8 @@ var (
 // CLI represents the command-line interface.
 type CLI struct {
 	Debug   bool       `kong:"env='DEBUG',help='Enable debug logging'"`
-	Sync    SyncCmd    `kong:"cmd,default,help='Synchronise Lagoon Keycloak Group Annotations'"`
+	Sync    SyncCmd    `kong:"cmd,default,help='Synchronise Lagoon Keycloak Group Attributes'"`
+	Dump    DumpCmd    `kong:"cmd,help='Dump Keycloak Groups as a JSON blob'"`
 	Version VersionCmd `kong:"cmd,help='Print version information'"`
 }
 

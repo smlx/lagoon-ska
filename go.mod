@@ -3,7 +3,7 @@ module github.com/smlx/lagoon-ska
 go 1.18
 
 require (
-	github.com/alecthomas/kong v0.6.1
+	github.com/alecthomas/kong v0.7.0
 	go.uber.org/zap v1.23.0
 	golang.org/x/oauth2 v0.0.0-20220722155238-128564f6959c
 )
